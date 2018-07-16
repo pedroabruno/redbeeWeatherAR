@@ -29,6 +29,31 @@ public class DBDriverImpl implements DBDriver{
 	
 	@Override
 	public void deleteCiudad(String usuario, String ciudad){
+		String query = "DELETE FROM WEATHER.RELPERSONACIUDAD WHERE idPersona = '" + usuario + "' and codCiudad = '"+ ciudad + "'";
+		dbExecuteUpdate(query);
+	}
+	
+	@Override
+	public boolean existeUsuario(String usuario){
+		String query = "SELECT * FROM WEATHER.PERSONA WHERE idPersona = '" + usuario + "'" ;
+		ResultSet resultSet = dbExecuteSelect(query);
+		try {
+			if(!resultSet.next()){
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	@Override
+	public void addUsuario(String usuario){
+		String query = "INSERT INTO WEATHER.PERSONA values('" + usuario + "')";
+		dbExecuteUpdate(query);
+	}
+	
+	private void dbExecuteUpdate(String nQuery){
 		
 		String loginUrl = "jdbc:mysql://localhost:3306/weather";
 		String loginUser = "root";
@@ -37,13 +62,27 @@ public class DBDriverImpl implements DBDriver{
 		try{
 			Connection myConn = DriverManager.getConnection(loginUrl,loginUser,loginPass);
 			Statement query = myConn.createStatement();
-			try{
-				query.executeUpdate("DELETE FROM WEATHER.RELPERSONACIUDAD WHERE idPersona = '" + usuario + "' and codCiudad = '"+ ciudad + "'");
-			}catch(SQLException e){
-				e.printStackTrace();
-			}
+			query.executeUpdate(nQuery);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 	}
+	
+	private ResultSet dbExecuteSelect(String nQuery){
+		
+		String loginUrl = "jdbc:mysql://localhost:3306/weather";
+		String loginUser = "root";
+		String loginPass = "1234";
+		ResultSet resultSet = null;
+		try{
+			Connection myConn = DriverManager.getConnection(loginUrl,loginUser,loginPass);
+			Statement query = myConn.createStatement();
+			resultSet = query.executeQuery(nQuery);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return resultSet;	
+
+	}
+	
 }

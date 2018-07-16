@@ -14,11 +14,18 @@ public class WeatherServiceImpl implements WeatherService  {
 	
 	@Override
 	public void addCiudad(String usuario, String ciudad){
+		if(!existeUsuario(usuario)){
+			dbDriver.addUsuario(usuario);
+		}
 		dbDriver.addCiudad(usuario, ciudad);
 	}
 	
 	@Override
 	public void removeCiudad(String usuario, String ciudad){
 		dbDriver.deleteCiudad(usuario, ciudad);
+	}
+	
+	private boolean existeUsuario(String usuario){
+		return dbDriver.existeUsuario(usuario);
 	}
 }

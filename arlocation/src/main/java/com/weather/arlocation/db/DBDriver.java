@@ -5,4 +5,8 @@ public interface DBDriver {
 	void addCiudad(String usuario, String ciudad);
 	
 	void deleteCiudad(String usuario, String ciudad);
+	
+	boolean existeUsuario(String usuario);
+	
+	void addUsuario(String usuario);
 }
