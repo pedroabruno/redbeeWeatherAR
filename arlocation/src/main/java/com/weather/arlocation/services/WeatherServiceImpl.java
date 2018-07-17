@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.weather.arlocation.db.DBDriver;
+import com.weather.arlocation.exceptions.BusinessException;
 
 @Service
 public class WeatherServiceImpl implements WeatherService  {
@@ -13,19 +14,27 @@ public class WeatherServiceImpl implements WeatherService  {
 	private DBDriver dbDriver;
 	
 	@Override
-	public void addCiudad(String usuario, String ciudad){
+	public void addUsuarioCiudad(String usuario, String ciudad) throws BusinessException{
 		if(!existeUsuario(usuario)){
-			dbDriver.addUsuario(usuario);
+			dbDriver.addPersona(usuario);
 		}
-		dbDriver.addCiudad(usuario, ciudad);
+		if(!existeCiudad(ciudad)){
+			
+			dbDriver.addCiudad(ciudad);
+		}
+		dbDriver.addPersonaCiudad(usuario, ciudad);
 	}
 	
 	@Override
-	public void removeCiudad(String usuario, String ciudad){
-		dbDriver.deleteCiudad(usuario, ciudad);
+	public void removeCiudad(String usuario, String ciudad) throws BusinessException{
+		dbDriver.deletePersonaCiudad(usuario, ciudad);
 	}
 	
-	private boolean existeUsuario(String usuario){
-		return dbDriver.existeUsuario(usuario);
+	private boolean existeUsuario(String usuario) throws BusinessException{
+		return dbDriver.existePersona(usuario);
+	}
+	
+	private boolean existeCiudad(String usuario) throws BusinessException{
+		return dbDriver.existeCiudad(usuario);
 	}
 }

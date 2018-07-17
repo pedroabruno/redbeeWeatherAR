@@ -1,6 +1,6 @@
 package com.weather.arlocation.resources;
 
-public class AddLocationRequest {
+public class LocationRequest {
 
 	private String usuario;
 	
